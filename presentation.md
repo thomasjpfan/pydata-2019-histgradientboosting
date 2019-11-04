@@ -9,7 +9,7 @@ slidenumbers: true
 Thomas J Fan
 Scikit-learn Core Developer
 
-# Scikit-learn API
+# Scikit-learn API 🛠
 
 ```py
 from sklearn.experimental import enable_hist_gradient_boosting
@@ -22,7 +22,7 @@ clf.fit(X, y)
 clf.predict(X)
 ```
 
-# Supervised learning
+# Supervised learning 📖
 
 $$
 y = f(X)
@@ -47,7 +47,7 @@ $$
 # Hist**Gradient**Boosting
 [.header: alignment(center)]
 
-# Gradient (Loss Function)
+# Gradient 🏔 (Loss Function)
 
 - **Regression**
     1. `least_squares`
@@ -57,7 +57,7 @@ $$
     1. `binary_crossentropy`
     1. `categorical_crossentropy`
 
-# Gradient (Regression Loss Function)
+# Gradient 🏔 (Regression Loss Function)
 
 - `least_squares`
 
@@ -65,7 +65,7 @@ $$
 L(y, f(X)) = \frac{1}{2}||y - f(X)||^2
 $$
 
-# Gradient - `least_squares`
+# Gradient 🏔 - `least_squares`
 
 - **Gradient**
 
@@ -157,7 +157,7 @@ $$
 
 [.header: alignment(center)]
 
-# Tree Growing (part 1)
+# Tree Growing 🌲 (part 1)
 
 ![right fit](images/tree-growing-1.png)
 
@@ -167,7 +167,7 @@ $$
         1. Evaluate split
     1. Pick **best** split
 
-# Tree Growing (part 2)
+# Tree Growing 🌲 (part 2)
 
 - Recall Loss, Gradient, Hessian
 
@@ -183,7 +183,7 @@ $$
 H = \nabla^2 L(y, f(X)) = 1
 $$
 
-# Tree Growing (part 3)
+# Tree Growing 🌲 (part 3)
 
 - How to evaluate split?
 
@@ -194,7 +194,7 @@ $$
 
 - $$\lambda$$: `l2_regularization=0`
 
-# Tree Growing (part 4)
+# Tree Growing 🌲 (part 4)
 
 ![right fit](images/tree-growing-2.png)
 
@@ -206,7 +206,7 @@ $$
 
 - Done?
 
-# Tree Growing (part 5)
+# Tree Growing 🌲 (part 5)
 
 ![right fit](images/tree-growing-2.png)
 
@@ -219,11 +219,11 @@ $$
 # **Hist**GradientBoosting
 [.header: alignment(center)]
 
-# Binning! (part 1)
+# Binning! 🗑 (part 1)
 
 ![inline fit](images/binning101.png)
 
-# Binning! (part 2)
+# Binning! 🗑 (part 2)
 
 ```py
 # Original data
@@ -234,31 +234,31 @@ $$
 [4, 9, 7, 6, 2, 1, 0, 8, 6, 7, ...]
 ```
 
-# Histograms! (part 1)
+# Histograms! 📊 (part 1)
 
 ![inline fit](images/binned-gradient-hess.png)
 
-# Histograms! (part 2)
+# Histograms! 📊 (part 2)
 
 1. For every feature
-    1. Build histogram **O(n)**
-    1. For every split point - **O(n_bins)**
+    1. Build histogram _**O(n)**_
+    1. For every split point - _**O(n\_bins)**_
         1. Evaluate split
     1. Pick **best** split
 
 ![right fit](images/gradient-split-points.png)
 
-# Histograms! (part 3)
+# Histograms! 📊 (part 3)
 
 ![inline fit](images/histogram_subtraction.png)
 
-# Trees = $$h_{m}(X)$$
+# Trees = $$h_{m}(X)$$ 🌲
 
 $$
-f(X) = C + \eta\sum_{m}h_{m}(X)
+f(X) = C + \eta\sum h_{m}(X)
 $$
 
-# Overview of Algorithm
+# Overview of Algorithm 👀
 
 1. Bin data
 1. Make initial predictions (constant)
@@ -268,14 +268,14 @@ $$
     1. Add tree to predictors
     1. Update gradients and hessians
 
-# Implementation?
+# Implementation? 🤔
 
 - Pure Python?
 - Numpy?
 - Cython?
 - Cython + OpenMP!
 
-# OpenMP! (Bin data, part 1)
+# OpenMP! (Bin data 🗑, part 1)
 
 1. _**Bin data**_
 1. Make initial predictions (constant)
@@ -285,7 +285,7 @@ $$
     1. Add tree to predictors
     1. Update gradients and hessians
 
-# OpenMP! (Bin data, part 2)
+# OpenMP! (Bin data 🗑, part 2)
 
 [.code-highlight: all]
 [.code-highlight: 1]
@@ -302,7 +302,7 @@ for i in range(data.shape[0]):
     binned[i] = left
 ```
 
-# OpenMP! (Bin data, part 3)
+# OpenMP! (Bin data 🗑, part 3)
 
 [.code-highlight: 1-4]
 
@@ -321,7 +321,7 @@ for i in prange(data.shape[0],
     binned[i] = left
 ```
 
-# OpenMP! (Calculate gradient and hessians, part 1)
+# OpenMP! (Calculate gradient and hessians 🌋, part 1)
 
 1. Bin data
 1. Make initial predictions (constant)
@@ -331,18 +331,24 @@ for i in prange(data.shape[0],
     1. Add tree to predictors
     1. Update gradients and hessians
 
-# OpenMP! (Calculate gradient and hessians, part 2)
+# OpenMP! (Calculate gradient and hessians 🌋, part 2)
+
+[.code-highlight: all]
+[.code-highlight: 1-3]
 
 ```py
 # sklearn/ensemble/_hist_gradient_boosting/histogram.pyx
 with nogil:
-    for i in prange(n_samples,
-                    schedule='static'):
+    for i in prange(n_samples, schedule='static'):
         ordered_gradients[i] = gradients[sample_indices[i]]
         ordered_hessians[i] = hessians[sample_indices[i]]
 ```
 
-# OpenMP! (Calculate gradient and hessians, part 3)
+# OpenMP! (Calculate gradient and hessians 🌋, part 3)
+
+[.code-highlight: all]
+[.code-highlight: 1-4]
+[.code-highlight: 6-8]
 
 ```py
 # sklearn/ensemble/_hist_gradient_boosting/histogram.pyx
@@ -355,7 +361,7 @@ for feature_idx in prange(n_features, schedule='static',
     _subtract_histograms(feature_idx, ...)
 ```
 
-# OpenMP! (Find best splits, part 1)
+# OpenMP! (Find best splits ✂️, part 1)
 
 1. Bin data
 1. Make initial predictions (constant)
@@ -365,7 +371,7 @@ for feature_idx in prange(n_features, schedule='static',
     1. Add tree to predictors
     1. Update gradients and hessians
 
-# OpenMP! (Splitting, part 2)
+# OpenMP! (Splitting ✂️, part 2)
 
 ```py
 # sklearn/ensemble/_hist_gradient_boosting/splitting.pyx
@@ -374,8 +380,7 @@ for thread_idx in prange(n_threads, schedule='static',
     # splits a partition of node
 ```
 
-
-# OpenMP! (Update gradients and hessians, part 1)
+# OpenMP! (Update gradients and hessians 🏔, part 1)
 
 1. Bin data
 1. Make initial predictions (constant)
@@ -385,7 +390,7 @@ for thread_idx in prange(n_threads, schedule='static',
     1. Add tree to predictors
     2. _**Update gradients and hessians**_
 
-# OpenMP! (Update gradients and hessians, part 2)
+# OpenMP! (Update gradients and hessians 🏔, part 2)
 
 - `least_squares`
 
@@ -395,7 +400,7 @@ for i in prange(n_samples, schedule='static', nogil=True):
     gradients[i] = raw_predictions[i] - y_true[i]
 ```
 
-# Hyperparameters (Bin data, part 1)
+# Hyperparameters (Bin data 🗑, part 1)
 
 1. _**Bin data**_
 1. Make initial predictions (constant)
@@ -405,13 +410,13 @@ for i in prange(n_samples, schedule='static', nogil=True):
     1. Add tree to predictors
     1. Update gradients and hessians
 
-# Hyperparameters (Bin data, part 2)
+# Hyperparameters (Bin data 🗑, part 2)
 
 - `max_bins=255`
 
 ![inline fit](images/binning101.png)
 
-# Hyperparameters (Loss, part 1)
+# Hyperparameters (Loss 📉, part 1)
 
 1. Bin data
 1. _**Make initial predictions (constant)**_
@@ -421,7 +426,7 @@ for i in prange(n_samples, schedule='static', nogil=True):
     1. Add tree to predictors
     2. _**Update gradients and hessians**_
 
-# Hyperparameters (Loss, part 2)
+# Hyperparameters (Loss 📉, part 2)
 
 - `HistGradientBoostingRegressor`
     1. `loss=least_squares` (default)
@@ -434,7 +439,7 @@ for i in prange(n_samples, schedule='static', nogil=True):
 
 - `l2_regularization=0`
 
-# Hyperparameters (Boosting, part 1)
+# Hyperparameters (Boosting 🏂, part 1)
 
 1. Bin data
 1. Make initial predictions (constant)
@@ -444,7 +449,7 @@ for i in prange(n_samples, schedule='static', nogil=True):
     1. Add tree to predictors
     1. Update gradients and hessians
 
-# Hyperparameters (Boosting, part 2)
+# Hyperparameters (Boosting 🏂, part 2)
 
 - `learning_rate=0.1` ($$\eta$$)
 - `max_iter=100`
@@ -453,15 +458,15 @@ $$
 f(X) = C + \eta\sum_{m}^{max\_iter}h_{m}(X)
 $$
 
-# Hyperparameters (Boosting, part 3)
+# Hyperparameters (Boosting 🏂, part 3)
 
 ![inline fit](images/hyperp_default.png)
 
-# Hyperparameters (Boosting, part 4)
+# Hyperparameters (Boosting 🏂, part 4)
 
 ![inline fit](images/hyperp_learning_rate_05.png)
 
-# Hyperparameters (Grow Trees, part 1)
+# Hyperparameters (Grow Trees 🎄, part 1)
 
 1. Bin data
 1. Make initial predictions (constant)
@@ -471,25 +476,25 @@ $$
     1. Add tree to predictors
     1. Update gradients and hessians
 
-# Hyperparameters (Grow Trees, part 2)
+# Hyperparameters (Grow Trees 🎄, part 2)
 
 - `max_leaf_nodes=31`
 - `max_depth=None`
 - `min_samples_leaf=20`
 
-# Hyperparameters (Grow Trees, part 3)
+# Hyperparameters (Grow Trees 🎄, part 3)
 
 ![inline fit](images/hyperp_max_leaf_nodes_200.png)
 
-# Hyperparameters (Grow Trees, part 4)
+# Hyperparameters (Grow Trees 🎄, part 4)
 
 ![inline fit](images/hyperp_max_depth_3.png)
 
-# Hyperparameters (Grow Trees, part 5)
+# Hyperparameters (Grow Trees 🎄, part 5)
 
 ![inline fit](images/hyperp_min_samples_leaf_100.png)
 
-# Hyperparameters (Early Stopping, part 1)
+# Hyperparameters (Early Stopping 🛑, part 1)
 
 1. Bin data
 1. _**Split into a validation dataset**_
@@ -499,33 +504,33 @@ $$
     1. ...
     1. _**Stop if early stop condition is true**_
 
-# Hyperparameters (Early Stopping, part 2)
+# Hyperparameters (Early Stopping 🛑, part 2)
 
 - `scoring=None` (could be 'loss')
 - `validation_fraction=0.1`
 - `n_iter_no_change=None`
 - `tol=1e-7`
 
-# Hyperparameters (Early Stopping, part 3)
+# Hyperparameters (Early Stopping 🛑, part 3)
 
 ![inline fit](images/hyperp_n_iter_no_change_10.png)
 
-# Hyperparameters (Early Stopping, part 4)
+# Hyperparameters (Early Stopping 🛑, part 4)
 
 ![inline fit](images/hyperp_tol_1e-2.png)
 
-# Hyperparameters (Misc)
+# Hyperparameters (Misc 🎁)
 
 - `verbose=0`
 - `random_state=None`
 
-# Benchmarks (HIGGS Part 1)
+# Benchmarks 🚀 (HIGGS Part 1)
 
 - 8800000 records
 - 28 features
 - binary classification  (1 for signal, 0 for background)
 
-# Benchmarks (HIGGS Part 2)
+# Benchmarks 🚀 (HIGGS Part 2)
 
 - `max_iter=100`, `learning_rate=0.1`, `export OMP_NUM_THREADS=12` (AMD 3900x)
 
@@ -536,7 +541,7 @@ $$
 | xgboost  | 48s  | 0.8126  | 0.7326   |
 | catboost | 100s | 0.8004  | 0.7222   |
 
-# Benchmarks (HIGGS Part 3)
+# Benchmarks 🚀 (HIGGS Part 3)
 
 - `max_iter=500`
 
@@ -548,7 +553,7 @@ $$
 | catboost | 427s | 0.8225  | 0.7412   |
 
 
-# Benchmarks (HIGGS Part 4)
+# Benchmarks 🚀 (HIGGS Part 4)
 
 `export OMP_NUM_THREADS=4` `max_iter=100` (on my laptop)
 
@@ -559,7 +564,7 @@ $$
 | xgboost  | 48s  | 115s |
 | catboost | 100s | 164 |
 
-# Roadmap (In upcoming 0.22)
+# Roadmap 🛣 (In upcoming 0.22)
 
 - ~~Missing Values~~
 
@@ -576,13 +581,13 @@ print(gbdt.predict(X[:20]))
 # [0 0 1 1 0 0 0 1 0 1 1 0 0 0 1 1 1 0 0 1]
 ```
 
-# Roadmap (After 0.22)
+# Roadmap 🛣 (After 0.22)
 
 - Discrete (Categorical) Feature support
 - Sparse Data
 - Sample Weights
 
-# Conclusion
+# Conclusion 🎉
 
 ```py
 from sklearn.experimental import enable_hist_gradient_boosting
