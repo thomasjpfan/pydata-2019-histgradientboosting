@@ -1,5 +1,7 @@
 # Deep Dive into scikit-learn's HistGradientBoosting Classifier and Regressor
 
+[Link to slides](https://github.com/thomasjpfan/pydata-2019-histgradientboosting/blob/master/presentation.pdf)
+
 ## Running benchmarks
 
 0. Install anaconda
