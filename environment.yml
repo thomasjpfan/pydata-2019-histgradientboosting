@@ -1,0 +1,12 @@
+name: 2019-pydata-nyc-hist
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - catboost=0.18
+  - lightgbm=2.2
+  - python=3.7
+  - scikit-learn=0.21
+  - xgboost=0.90
+  - matplotlib
+  - jupyterlab
