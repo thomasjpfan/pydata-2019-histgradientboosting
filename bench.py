@@ -19,7 +19,7 @@ from sklearn.ensemble._hist_gradient_boosting.utils import (
 HERE = os.path.dirname(__file__)
 URL = ("https://archive.ics.uci.edu/ml/machine-learning-databases/00280/"
        "HIGGS.csv.gz")
-m = Memory(location='/tmp', mmap_mode='r')
+m = Memory(location='./cache', mmap_mode='r')
 
 
 @m.cache

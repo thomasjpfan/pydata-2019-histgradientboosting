@@ -107,7 +107,8 @@ $$
 f_{m+1}(X) = f_{m}(X) + \eta h_{m}(X)
 $$
 
-- We need to learn $$h_{m}$$!
+- We need to learn $$h_{m}(X)$$!
+- For the next example, let $$\eta=1$$
 
 # Gradient Boosting 🏂 (Example, part 1)
 
@@ -125,10 +126,8 @@ $$
 
 # Gradient Boosting 🏂 (Example, part 2)
 
-For example, let $$\eta=1$$
-
 $$
-f_{m+1}(X) = f_{m}(X) + \eta h_{m}(X)
+f_{m+1}(X) = f_{m}(X) + h_{m}(X)
 $$
 
 | $$f_0(X)$$ | $$h_0(X)$$ | $$f_1(X)$$ | $$y - f_1(X)$$ | $$h_1(X)$$ | $$f_2(X)$$ |
@@ -153,9 +152,11 @@ $$
 f(40) = 78 + h_0(40) + h_1(40)
 $$
 
-# How to learn $$h(X)$$?
+# How to learn $$h_m(X)$$?
 
-[.header: alignment(center)]
+[.header: alignment(center), text-scale(2)]
+[.text: alignment(center), text-scale(2)]
+🌲!
 
 # Tree Growing 🌲 (part 1)
 
@@ -165,7 +166,7 @@ $$
     1. Sort feature
     1. For every split point
         1. Evaluate split
-    1. Pick **best** split
+1. Pick **best** split
 
 # Tree Growing 🌲 (part 2)
 
@@ -202,7 +203,7 @@ $$
     1. Sort feature
     1. For every split point
         1. Evaluate split
-    1. Pick **best** split
+1. Pick **best** split
 
 - Done?
 
@@ -214,7 +215,7 @@ $$
     1. Sort feature - _**O(nlog(n))**_
     1. For every split point - _**O(n)**_
         1. Evaluate split
-    1. Pick **best** split
+1. Pick **best** split
 
 # **Hist**GradientBoosting
 [.header: alignment(center)]
@@ -244,7 +245,7 @@ $$
     1. Build histogram _**O(n)**_
     1. For every split point - _**O(n\_bins)**_
         1. Evaluate split
-    1. Pick **best** split
+1. Pick **best** split
 
 ![right fit](images/gradient-split-points.png)
 
@@ -287,7 +288,6 @@ $$
 
 # OpenMP! (Bin data 🗑, part 2)
 
-[.code-highlight: all]
 [.code-highlight: 1]
 
 ```py
@@ -321,30 +321,17 @@ for i in prange(data.shape[0],
     binned[i] = left
 ```
 
-# OpenMP! (Calculate gradient and hessians 🌋, part 1)
+# OpenMP! (building histograms 🌋, part 1)
 
 1. Bin data
 1. Make initial predictions (constant)
-1. _**Calculate gradients and hessians**_
+1. Calculate gradients and hessians
 1. Grow Trees For Boosting
     1. Find best splits by _**building histograms**_
     1. Add tree to predictors
     1. Update gradients and hessians
 
-# OpenMP! (Calculate gradient and hessians 🌋, part 2)
-
-[.code-highlight: all]
-[.code-highlight: 1-3]
-
-```py
-# sklearn/ensemble/_hist_gradient_boosting/histogram.pyx
-with nogil:
-    for i in prange(n_samples, schedule='static'):
-        ordered_gradients[i] = gradients[sample_indices[i]]
-        ordered_hessians[i] = hessians[sample_indices[i]]
-```
-
-# OpenMP! (Calculate gradient and hessians 🌋, part 3)
+# OpenMP! (building histograms 🌋, part 2)
 
 [.code-highlight: all]
 [.code-highlight: 1-4]
@@ -367,11 +354,19 @@ for feature_idx in prange(n_features, schedule='static',
 1. Make initial predictions (constant)
 1. Calculate gradients and hessians
 1. Grow Trees For Boosting
-    1. Find best _**splits**_ by building histograms
+    1. _**Find best splits**_ by building histograms
     1. Add tree to predictors
     1. Update gradients and hessians
 
-# OpenMP! (Splitting ✂️, part 2)
+# OpenMP! (Find best splits ✂️, part 2)
+
+```py
+# sklearn/ensemble/_hist_gradient_boosting/splitting.pyx
+for feature_idx in prange(n_features, schedule='static'):
+    # For each feature, find best bin to split on
+```
+
+# OpenMP! (Splitting ✂️, part 3)
 
 ```py
 # sklearn/ensemble/_hist_gradient_boosting/splitting.pyx
@@ -490,10 +485,6 @@ $$
 
 ![inline fit](images/hyperp_max_depth_3.png)
 
-# Hyperparameters (Grow Trees 🎄, part 5)
-
-![inline fit](images/hyperp_min_samples_leaf_100.png)
-
 # Hyperparameters (Early Stopping 🛑, part 1)
 
 1. Bin data
@@ -514,10 +505,6 @@ $$
 # Hyperparameters (Early Stopping 🛑, part 3)
 
 ![inline fit](images/hyperp_n_iter_no_change_10.png)
-
-# Hyperparameters (Early Stopping 🛑, part 4)
-
-![inline fit](images/hyperp_tol_1e-2.png)
 
 # Hyperparameters (Misc 🎁)
 
@@ -562,7 +549,13 @@ $$
 | sklearn  | 38s  | 85s |
 | lightgbm | 39s  | 86s |
 | xgboost  | 48s  | 115s |
-| catboost | 100s | 164 |
+| catboost | 100s | 164s |
+
+# Benchmarks 🚀 (HIGGS Part 5)
+
+[.header: alignment(center), text-scale(1.8)]
+[.text: alignment(center), text-scale(1.8)]
+DEMO!
 
 # Roadmap 🛣 (In upcoming 0.22)
 
@@ -602,3 +595,5 @@ from sklearn.ensemble import HistGradientBoostingRegressor
 pip install --pre -f \
 https://sklearn-nightly.scdn8.secure.raxcdn.com scikit-learn
 ```
+
+- [github.com/thomasjpfan/pydata-2019-histgradientboosting](https://github.com/thomasjpfan/pydata-2019-histgradientboosting)
