@@ -510,6 +510,7 @@ $$
 
 - `verbose=0`
 - `random_state=None`
+- `export OMP_NUM_THREADS=12`
 
 # Benchmarks 🚀 (HIGGS Part 1)
 
@@ -519,7 +520,7 @@ $$
 
 # Benchmarks 🚀 (HIGGS Part 2)
 
-- `max_iter=100`, `learning_rate=0.1`, `export OMP_NUM_THREADS=12` (AMD 3900x)
+- `max_iter=100`, `learning_rate=0.1`, `export OMP_NUM_THREADS=12`
 
 | library  | time | roc auc | accuracy |
 |----------|------|---------|----------|
