@@ -581,6 +581,11 @@ print(gbdt.predict(X[:20]))
 - Sparse Data
 - Sample Weights
 
+# Thank you Working on This 🎉
+
+- @hug_nicolas - Associate Research Scientist @ Columbia University
+- All the core developers for reviewing!
+
 # Conclusion 🎉
 
 ```py
@@ -598,3 +603,13 @@ https://sklearn-nightly.scdn8.secure.raxcdn.com scikit-learn
 ```
 
 - [github.com/thomasjpfan/pydata-2019-histgradientboosting](https://github.com/thomasjpfan/pydata-2019-histgradientboosting)
+
+# Appendix
+
+- Loss function with l2 regularization
+
+$$
+L(y, f(X)) = \frac{1}{2}||y - f(X)||^2 + \lambda \sum_i w_i^2
+$$
+
+where $$w_i$$ score of the leaves.
