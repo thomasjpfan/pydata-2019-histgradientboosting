@@ -8,6 +8,7 @@ slidenumbers: true
 
 Thomas J Fan
 Scikit-learn Core Developer
+@thomasjpfan
 
 # Scikit-learn API 🛠
 
@@ -590,7 +591,6 @@ print(gbdt.predict(X[:20]))
 
 ```py
 from sklearn.experimental import enable_hist_gradient_boosting
-
 from sklearn.ensemble import HistGradientBoostingClassifier
 from sklearn.ensemble import HistGradientBoostingRegressor
 ```
@@ -598,11 +598,12 @@ from sklearn.ensemble import HistGradientBoostingRegressor
 - Try out the dev build (for missing values):
 
 ```bash
-pip install --pre -f \
-https://sklearn-nightly.scdn8.secure.raxcdn.com scikit-learn
+pip install --pre -f https://sklearn-nightly.scdn8.secure.raxcdn.com scikit-learn
 ```
 
 - [github.com/thomasjpfan/pydata-2019-histgradientboosting](https://github.com/thomasjpfan/pydata-2019-histgradientboosting)
+
+- Twitter: @thomasjpfan
 
 # Appendix
 
